@@ -2,6 +2,8 @@
 #include <string.h>
 #include <unistd.h>
 #include <stdlib.h>
+#include <sys/types.h>
+#include <sys/wait.h>
 
 #define BUFSIZE 64
 
@@ -21,6 +23,7 @@ int main(int argc, char *argv[]){
 	int i,j,ctr;
 	char line[256];	
 	int numberOfProcess;
+	pid_t childpid = 0;
 	while((c = getopt(argc, argv, "hi:o:t:")) != -1){
 		
 		switch(c){
@@ -96,12 +99,25 @@ int main(int argc, char *argv[]){
 	
 	//convert first character of the input file to integer to be able to determine the number of processes needed	
 	numberOfProcess = newString[0][0] - '0';
+		
 	
 	printf("\n Strings or words after split by space are :\n");
     	for(i=0;i < ctr;i++)
         printf(" %s\n",newString[i]);
 
 	printf("number of process: %d\n\n", numberOfProcess);
+	printf("number of ctr: %d\n", ctr);
+	//fork();
+	//printf("hey\n");
+	for(i = 0; i < numberOfProcess; i++){
+		if ((childpid = fork()) <= 0){
+         		break;	
+		}
+			
+	}
+	fprintf(stderr, "i:%d  process ID:%ld  parent ID:%ld  child ID:%ld\n",
+           i, (long)getpid(), (long)getppid(), (long)childpid);
+
 	fclose(fp);
 	return 0;
 }
